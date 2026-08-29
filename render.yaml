@@ -1,0 +1,30 @@
+# Render blueprint — https://render.com/docs/blueprint-spec
+#
+# The Vite build is unchanged and still emits the Cloudflare Workers bundle;
+# app/server-node.mjs adapts that handler to node:http and serves dist/client.
+# Deploying to Cloudflare instead simply ignores this file.
+#
+# Bun is not one of Render's native runtimes, but the repo uses bun workspaces
+# with the `workspace:*` protocol (packages/fnf, quanta, app-landing), so the
+# build installs bun first rather than reaching for npm. If that ever proves
+# flaky, the sturdier option is `runtime: docker` on an oven/bun base image.
+services:
+  - type: web
+    name: eco-taxi-porec
+    runtime: node
+    # Frankfurt is the closest region to Poreč.
+    region: frankfurt
+    plan: starter
+    branch: main
+    rootDir: app
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install --frozen-lockfile
+      bun run build
+    startCommand: node server-node.mjs
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
