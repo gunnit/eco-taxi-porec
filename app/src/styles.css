@@ -335,6 +335,50 @@
   .nav-call svg {
     width: 1.05rem;
     height: 1.05rem;
+    flex: none;
+  }
+
+  .nav-call__short {
+    display: none;
+  }
+
+  .brand-copy strong,
+  .brand-copy small,
+  .nav-call {
+    white-space: nowrap;
+  }
+
+  /* -------------------------------------------------- language switcher */
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin: 0;
+    padding: 0 0.1rem 0 0.45rem;
+    border-left: 1px solid rgb(244 241 232 / 0.16);
+    list-style: none;
+  }
+
+  .lang-switch a {
+    display: block;
+    padding: 0.45rem 0.42rem;
+    border-radius: 8px;
+    color: rgb(244 241 232 / 0.55);
+    font: 600 0.66rem/1 var(--mono);
+    letter-spacing: 0.08em;
+    transition:
+      color 180ms var(--ease-out),
+      background 180ms var(--ease-out);
+  }
+
+  .lang-switch a:hover {
+    color: var(--eco-salt);
+  }
+
+  .lang-switch a[aria-current="true"] {
+    color: var(--eco-salt);
+    background: rgb(244 241 232 / 0.13);
   }
 
   /* -------------------------------------------------------------- brand */
@@ -637,7 +681,9 @@
 
   .facts-grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    /* Near-even split so the display heading has room for languages with
+     * longer words than English. */
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr);
     gap: clamp(3rem, 6vw, 7rem);
     align-items: start;
   }
@@ -1230,6 +1276,12 @@
   }
 
   @media (max-width: 860px) {
+    /* The bar carries the language switcher now, so the in-page links go before
+     * it runs out of room — those sections are one scroll away regardless. */
+    .site-nav nav > a:not(.nav-call) {
+      display: none;
+    }
+
     .ride-chapter {
       align-self: end;
     }
@@ -1288,22 +1340,42 @@
       border-radius: 15px;
     }
 
-    .site-nav nav > a:not(.nav-call) {
-      display: none;
-    }
-
     .nav-call {
       padding: 0.7rem 0.9rem;
       font-size: 0.85rem;
+    }
+
+    .lang-switch {
+      padding-left: 0.3rem;
+    }
+
+    .lang-switch a {
+      padding: 0.42rem 0.22rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.02em;
     }
 
     .brand-copy strong {
       font-size: 0.8rem;
     }
 
+    /* The mono sub-label is the widest thing in the mark and would push the
+     * whole bar into wrapping — the hero and footer still carry it. */
+    .brand-copy small {
+      display: none;
+    }
+
     .brand-wheel {
       width: 1.9rem;
       height: 1.9rem;
+    }
+
+    .nav-call__full {
+      display: none;
+    }
+
+    .nav-call__short {
+      display: inline;
     }
 
     .floating-call {
@@ -1553,5 +1625,14 @@
     align-items: flex-start;
     padding-top: 7rem;
     padding-bottom: 4rem;
+  }
+}
+
+/* Only on the narrowest phones does the wordmark have to give: measured, the
+ * bar still fits it at 375px. The wheel keeps the identity below that, and the
+ * full name is the first thing in the hero either way. */
+@media (max-width: 364px) {
+  .site-nav .brand-copy {
+    display: none;
   }
 }

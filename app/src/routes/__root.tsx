@@ -3,6 +3,7 @@ import {
   Outlet,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -14,6 +15,7 @@ import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 // repo by the marketplace meta API and read at BUILD time — no runtime fetch.
 // Editing it via the app settings UI rewrites this file and redeploys the app.
 import appMetaJson from "../app-meta.json";
+import { defaultLocale, isLocale, localeTag } from "../i18n/content";
 
 declare const __HF_DESIGN_INSPECTOR__: boolean;
 
@@ -140,8 +142,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  // The site is served one locale per path (/, /hr, /de, /it), so <html lang>
+  // follows the URL. Read from router state rather than a browser global so the
+  // server renders the right value on the first byte.
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const segment = pathname.split("/")[1] ?? "";
+  const locale = isLocale(segment) ? segment : defaultLocale;
+
   return (
-    <html lang="en" style={{ colorScheme: "dark" }}>
+    <html lang={localeTag[locale]} style={{ colorScheme: "dark" }}>
       <head>
         <HeadContent />
       </head>

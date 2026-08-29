@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { landingContentSchema } from "@higgsfield/app-landing";
 import { landingContent } from "../src/landing-content";
+import { localePath } from "../src/i18n/content";
 
 describe("scroll-scrub website landing contract", () => {
   test("uses a safe full-app route preview", () => {
@@ -25,8 +26,15 @@ describe("scroll-scrub website landing contract", () => {
     const appRoute = readFileSync(new URL("../src/routes/app.tsx", import.meta.url), "utf8");
 
     // scroll-scrub's home IS the site: "/" renders the journey instead of the
-    // stock LandingPage. Everything else about the split is unchanged.
-    expect(landingRoute).toContain("ScrollScrub");
+    // stock LandingPage. Everything else about the split is unchanged. The
+    // journey now sits one level down in the shared, localized site component
+    // that every language route renders, so assert through that indirection.
+    const siteComponent = readFileSync(
+      new URL("../src/components/eco-taxi-site.tsx", import.meta.url),
+      "utf8",
+    );
+    expect(landingRoute).toContain("EcoTaxiSite");
+    expect(siteComponent).toContain("ScrollScrub");
     expect(appRoute).toContain('createFileRoute("/app")');
     expect(appRoute).toContain("previewMode");
   });
@@ -38,5 +46,14 @@ describe("scroll-scrub website landing contract", () => {
     expect(layout).toContain('mode="generations"');
     expect(layout).toContain("<UserGenerations demo");
     expect(layout).toContain("<PromptBox.Root");
+  });
+
+  test("every locale is a real route", () => {
+    for (const [locale, path] of Object.entries(localePath)) {
+      const file = locale === "en" ? "index" : locale;
+      const route = readFileSync(new URL(`../src/routes/${file}.tsx`, import.meta.url), "utf8");
+      expect(route).toContain(`createFileRoute("${path}")`);
+      expect(route).toContain(`locale="${locale}"`);
+    }
   });
 });
