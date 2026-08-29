@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { publicOrigin } from "@/lib/public-origin";
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const origin = new URL(request.url).origin;
+        const origin = publicOrigin(request);
         const today = new Date().toISOString().split("T")[0];
         const xml = [
           '<?xml version="1.0" encoding="UTF-8"?>',
