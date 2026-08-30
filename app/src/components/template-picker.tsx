@@ -42,12 +42,7 @@ import { Typography } from "@higgsfield/quanta/typography";
 // Pure style-picker label thumbnails may keep simple placeholder art when
 // real output depends on the user's own upload. Grep "PLACEHOLDER ASSETS"
 // to find every site.
-const THUMBS = [
-  "/presets/how-product-works.png",
-  "/presets/explain.png",
-  "/presets/hyper-motion.png",
-  "/presets/cover.png",
-] as const;
+const THUMB = "/presets/how-product-works.png";
 
 /** Branded lead-tile gradients (no Quanta gradient token — documented literals). */
 const BADGE_GRADIENT = {
@@ -80,7 +75,7 @@ export const TEMPLATES: TemplateItem[] = [
     subtitle: "Turn long videos into short clips",
     category: "ugc",
     kind: "video",
-    images: [THUMBS[0], THUMBS[1], THUMBS[2]],
+    images: [THUMB, THUMB, THUMB],
     icon: IconBatteryFullFilled,
     gradient: "tiktok",
   },
@@ -90,7 +85,7 @@ export const TEMPLATES: TemplateItem[] = [
     subtitle: "Product hero, larger than life",
     category: "tiktok",
     kind: "image",
-    images: [THUMBS[1], THUMBS[3], THUMBS[0]],
+    images: [THUMB, THUMB, THUMB],
     icon: IconImagineAiFilled,
     gradient: "tiktok",
   },
@@ -100,7 +95,7 @@ export const TEMPLATES: TemplateItem[] = [
     subtitle: "Editorial style transfer",
     category: "commercial",
     kind: "image",
-    images: [THUMBS[2], THUMBS[0], THUMBS[1]],
+    images: [THUMB, THUMB, THUMB],
     icon: IconDateYearlyFilled,
     gradient: "blue",
   },
@@ -110,7 +105,7 @@ export const TEMPLATES: TemplateItem[] = [
     subtitle: "Lifestyle story in 3 shots",
     category: "ugc",
     kind: "video",
-    images: [THUMBS[3], THUMBS[2], THUMBS[0]],
+    images: [THUMB, THUMB, THUMB],
     icon: IconHomeRoundDoorFilled,
     gradient: "pink",
   },
@@ -120,7 +115,7 @@ export const TEMPLATES: TemplateItem[] = [
     subtitle: "Fast-cut reveal for TikTok",
     category: "tiktok",
     kind: "video",
-    images: [THUMBS[0], THUMBS[2], THUMBS[3]],
+    images: [THUMB, THUMB, THUMB],
     icon: IconImagineAiFilled,
     gradient: "tiktok",
   },
@@ -130,7 +125,7 @@ export const TEMPLATES: TemplateItem[] = [
     subtitle: "Clean commercial catalogue",
     category: "commercial",
     kind: "image",
-    images: [THUMBS[1], THUMBS[0], THUMBS[3]],
+    images: [THUMB, THUMB, THUMB],
     icon: IconDateYearlyFilled,
     gradient: "blue",
   },

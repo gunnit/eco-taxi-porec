@@ -106,19 +106,14 @@ export type AssetLibraryPagination = Partial<Record<AssetLibraryTab, AssetLibrar
 // show. When adapting this template into a real app, pass `items` wired to
 // the app's own data (see WIRING REQUIRED above) — do not ship the demo set.
 // Grep "PLACEHOLDER ASSETS" to find every site.
-const THUMBS = [
-  "/presets/how-product-works.png",
-  "/presets/explain.png",
-  "/presets/hyper-motion.png",
-  "/presets/cover.png",
-];
+const THUMB = "/presets/how-product-works.png";
 
 // PLACEHOLDER ASSETS — demo data; replace when adapting (see note above).
 const DEMO_ITEMS: AssetLibraryItem[] = [
   {
     name: "@Ultraviolet",
     type: "Location",
-    src: THUMBS[0],
+    src: THUMB,
     kind: "upload",
     badge: "T",
     badgeColor: "pink",
@@ -126,18 +121,18 @@ const DEMO_ITEMS: AssetLibraryItem[] = [
   {
     name: "@Ultraviolet",
     type: "Character",
-    src: THUMBS[1],
+    src: THUMB,
     kind: "upload",
     liked: true,
     badge: "C",
     badgeColor: "mint",
   },
-  { name: "@Ultraviolet", type: "Location", src: THUMBS[2], kind: "image" },
-  { name: "@Ultraviolet", type: "Location", src: THUMBS[3], kind: "image", liked: true },
+  { name: "@Ultraviolet", type: "Location", src: THUMB, kind: "image" },
+  { name: "@Ultraviolet", type: "Location", src: THUMB, kind: "image", liked: true },
   {
     name: "@Ultraviolet",
     type: "Location",
-    src: THUMBS[2],
+    src: THUMB,
     kind: "image",
     badge: "G",
     badgeColor: "mint",
@@ -145,14 +140,14 @@ const DEMO_ITEMS: AssetLibraryItem[] = [
   {
     name: "@Ultraviolet",
     type: "Location",
-    src: THUMBS[1],
+    src: THUMB,
     kind: "video",
     badge: "A",
     badgeColor: "blue",
   },
-  { name: "@Ultraviolet", type: "Location", src: THUMBS[0], kind: "video" },
-  { name: "@Ultraviolet", type: "Location", src: THUMBS[0], kind: "image", personal: false },
-  { name: "@Ultraviolet", type: "Location", src: THUMBS[0], kind: "image", personal: false },
+  { name: "@Ultraviolet", type: "Location", src: THUMB, kind: "video" },
+  { name: "@Ultraviolet", type: "Location", src: THUMB, kind: "image", personal: false },
+  { name: "@Ultraviolet", type: "Location", src: THUMB, kind: "image", personal: false },
 ];
 
 const HEADER_TABS = [

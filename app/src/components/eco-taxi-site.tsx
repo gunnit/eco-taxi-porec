@@ -1,25 +1,23 @@
 /**
- * The whole public site, in one of four languages.
+ * The public EkoTaxi site in four indexable languages.
  *
- * Structure — order, icons, imagery, ids — lives here; every string comes from
- * `@/i18n/content`. Each locale gets its own thin route (`/`, `/hr`, `/de`,
- * `/it`) that renders this component, so every language is a real, indexable
- * URL rather than a client-side toggle.
+ * The attached source photographs never ship. Public vehicle media is a
+ * people-free reconstruction, and all logo lettering is deterministic SVG.
  */
 import {
+  ArrowDownRight,
   ArrowUpRight,
   Bicycle,
   Camera,
   FacebookLogo,
   Leaf,
-  MapPin,
   Path,
   Phone,
-  Star,
   UmbrellaSimple,
 } from "@phosphor-icons/react";
 
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
+import { StructuredData } from "@/components/StructuredData";
 import {
   localePath,
   localeShort,
@@ -30,33 +28,62 @@ import {
 } from "@/i18n/content";
 import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
 
-export const phoneLabel = "+385 95 858 4045";
-export const phoneHref = "tel:+385958584045";
-export const mapsHref = "https://maps.app.goo.gl/kzrg5z3pLZSdArz79";
-export const facebookHref = "https://www.facebook.com/riksa.porec/";
-export const addressLabel = "Zagrebačka ul. 19, 52440 Poreč";
+export const phoneContacts = [
+  {
+    id: "igor",
+    name: "Igor",
+    label: "+385 98 165 2854",
+    href: "tel:+385981652854",
+  },
+  {
+    id: "toni",
+    name: "Toni",
+    label: "+385 95 858 4045",
+    href: "tel:+385958584045",
+  },
+] as const;
 
-/**
- * Document head for one locale.
- *
- * hreflang and canonical hrefs are deliberately root-relative: crawlers resolve
- * them against the document, so they stay correct on the Render URL today and
- * on the client's own domain later, with nothing to reconfigure.
- */
+export const facebookHref = "https://www.facebook.com/riksa.porec/";
+
+const structuredData: Record<Locale, string> = Object.fromEntries(
+  locales.map((locale) => [
+    locale,
+    JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: "EkoTaxi Poreč",
+      description: siteContent[locale].meta.description,
+      areaServed: {
+        "@type": "City",
+        name: locale === "it" ? "Parenzo" : "Poreč",
+      },
+      contactPoint: phoneContacts.map((contact) => ({
+        "@type": "ContactPoint",
+        contactType: "ride booking",
+        name: contact.name,
+        telephone: contact.label,
+      })),
+      sameAs: [facebookHref],
+    }),
+  ]),
+) as Record<Locale, string>;
+
+/** Document metadata for one locale. */
 export function localizedHead(locale: Locale) {
   const { meta } = siteContent[locale];
 
   return {
-    // charSet / viewport / favicon / og:image stay in the root head — only the
-    // language-specific tags belong here.
     meta: [
       { title: meta.title },
       { name: "description", content: meta.description },
-      { name: "author", content: "Rikša Poreč - EkoTaxi" },
+      { name: "author", content: "EkoTaxi Poreč" },
       { property: "og:title", content: meta.title },
       { property: "og:description", content: meta.description },
       { property: "og:locale", content: localeTag[locale] },
+      { property: "og:site_name", content: "EkoTaxi Poreč" },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: meta.title },
+      { name: "twitter:description", content: meta.description },
     ],
     links: [
       { rel: "canonical", href: localePath[locale] },
@@ -70,11 +97,7 @@ export function localizedHead(locale: Locale) {
   };
 }
 
-const factOrder = [
-  { id: "since", star: false },
-  { id: "rating", star: true },
-  { id: "air", star: false },
-] as const;
+const factOrder = ["since", "contacts", "air"] as const;
 
 const benefitOrder = [
   { id: "light", Icon: Bicycle },
@@ -89,8 +112,18 @@ const momentOrder = [
     src: "/assets/eco/waterfront.jpg",
     index: "01",
   },
-  { id: "lane", className: "moment moment-b", src: "/assets/eco/moment-lane.jpg", index: "02" },
-  { id: "square", className: "moment moment-c", src: "/assets/eco/moment-square.jpg", index: "03" },
+  {
+    id: "lane",
+    className: "moment moment-b",
+    src: "/assets/eco/moment-lane.jpg",
+    index: "02",
+  },
+  {
+    id: "square",
+    className: "moment moment-c",
+    src: "/assets/eco/moment-square.jpg",
+    index: "03",
+  },
 ] as const;
 
 const highlightOrder = [
@@ -111,22 +144,8 @@ function BrandMark({ className, locale }: { className?: string; locale: Locale }
       className={["brand-mark", className].filter(Boolean).join(" ")}
       href={`${localePath[locale]}#top`}
     >
-      <span aria-hidden="true" className="brand-wheel">
-        <svg fill="none" focusable="false" viewBox="0 0 40 40">
-          <circle className="brand-wheel__tyre" cx="20" cy="20" r="15.5" />
-          <g className="brand-wheel__spokes">
-            <path d="M20 5.5V34.5" />
-            <path d="M5.5 20H34.5" />
-            <path d="M9.75 9.75L30.25 30.25" />
-            <path d="M30.25 9.75L9.75 30.25" />
-          </g>
-          <circle className="brand-wheel__hub" cx="20" cy="20" r="3.4" />
-        </svg>
-      </span>
-      <span className="brand-copy">
-        <strong>Rikša Poreč</strong>
-        <small>{t.brand.sub}</small>
-      </span>
+      <img alt="" src="/assets/brand/ekotaxi-logo.svg" />
+      <span className="visually-hidden">EkoTaxi Poreč</span>
     </a>
   );
 }
@@ -138,12 +157,10 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
     <ul aria-label={t.nav.language} className="lang-switch">
       {locales.map((option) => (
         <li key={option}>
-          {/* A full document load, not a client transition: it gives the new
-           * language a correct <html lang>, its own head, and a clean scrub. */}
           <a
-            aria-current={option === locale ? "true" : undefined}
-            hrefLang={localeTag[option]}
+            aria-current={option === locale ? "page" : undefined}
             href={localePath[option]}
+            hrefLang={localeTag[option]}
             lang={localeTag[option]}
           >
             {localeShort[option]}
@@ -154,32 +171,26 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
   );
 }
 
-function FloatingCall({ locale }: { locale: Locale }) {
+function HeroContacts({ locale }: { locale: Locale }) {
   const t = siteContent[locale];
 
   return (
-    <a
-      aria-label={`${t.hero.callAria} ${phoneLabel}`}
-      className="floating-call"
-      href={phoneHref}
-    >
-      <svg aria-hidden="true" className="call-ring" focusable="false" viewBox="0 0 120 120">
-        <defs>
-          <path
-            d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"
-            id="call-ring-path"
-          />
-        </defs>
-        <text>
-          <textPath href="#call-ring-path" startOffset="0">
-            {t.hero.ringText}
-          </textPath>
-        </text>
-      </svg>
-      <span aria-hidden="true" className="call-disc">
-        <Phone weight="fill" />
-      </span>
-    </a>
+    <aside aria-label={t.contacts.aria} className="hero-contacts">
+      <p>{t.contacts.direct}</p>
+      <div>
+        {phoneContacts.map((contact) => (
+          <a
+            aria-label={`${t.contacts.call} ${contact.name}: ${contact.label}`}
+            href={contact.href}
+            key={contact.id}
+          >
+            <span>{contact.name}</span>
+            <strong>{contact.label}</strong>
+            <Phone aria-hidden="true" weight="fill" />
+          </a>
+        ))}
+      </div>
+    </aside>
   );
 }
 
@@ -188,20 +199,19 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
 
   return (
     <main className="site-shell" id="top">
+      <StructuredData json={structuredData[locale]} />
+
       <header className="site-nav">
         <div className="site-nav__inner">
           <BrandMark locale={locale} />
           <nav aria-label={t.nav.main}>
             <a href="#ride">{t.nav.ride}</a>
-            <a href="#why">{t.nav.why}</a>
-            <a href="#moments">{t.nav.moments}</a>
+            <a href="#vehicle">{t.nav.vehicle}</a>
+            <a href="#contact">{t.nav.contact}</a>
             <LanguageSwitch locale={locale} />
-            {/* aria-label carries the full wording, so the visible label can
-             * shorten on narrow screens without costing the accessible name. */}
-            <a aria-label={t.nav.call} className="nav-call" href={phoneHref}>
-              <Phone weight="bold" />
-              <span className="nav-call__full">{t.nav.call}</span>
-              <span className="nav-call__short">{t.nav.callShort}</span>
+            <a aria-label={t.contacts.aria} className="nav-call" href="#contact">
+              <Phone aria-hidden="true" weight="bold" />
+              <span>{t.nav.call}</span>
             </a>
           </nav>
         </div>
@@ -213,11 +223,10 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
           scenes={scrollScrubScenes[locale]}
           theme={scrollScrubTheme}
         />
-        <div aria-hidden="true" className="scroll-cue">
-          <span className="scroll-cue__label">{t.hero.scrollCue}</span>
-          <span className="scroll-cue__rail" />
+        <div aria-hidden="true" className="hero-brand-plate">
+          <img alt="" src="/assets/brand/ekotaxi-logo.svg" />
         </div>
-        <FloatingCall locale={locale} />
+        <HeroContacts locale={locale} />
       </div>
 
       <section className="facts-section section-pad" id="ride">
@@ -230,20 +239,17 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
               {t.ride.lines[1]}
             </h2>
             <p className="section-lede">{t.ride.lede}</p>
-            <a className="text-link" href={mapsHref} rel="noreferrer" target="_blank">
+            <a className="text-link" href="#contact">
               {t.ride.link}
-              <ArrowUpRight weight="bold" />
+              <ArrowDownRight aria-hidden="true" weight="bold" />
             </a>
           </div>
 
           <dl className="facts-rail">
-            {factOrder.map(({ id, star }) => (
+            {factOrder.map((id) => (
               <div className="facts-rail__row" key={id}>
                 <dt>{t.facts[id].label}</dt>
-                <dd className="facts-rail__value">
-                  {t.facts[id].value}
-                  {star ? <Star aria-hidden="true" weight="fill" /> : null}
-                </dd>
+                <dd className="facts-rail__value">{t.facts[id].value}</dd>
                 <dd className="facts-rail__note">{t.facts[id].note}</dd>
               </div>
             ))}
@@ -268,7 +274,7 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
         <div className="benefit-grid">
           {benefitOrder.map(({ id, Icon }) => (
             <article key={id}>
-              <Icon weight="duotone" />
+              <Icon aria-hidden="true" weight="duotone" />
               <h3>{t.why[id].title}</h3>
               <p>{t.why[id].body}</p>
             </article>
@@ -276,7 +282,7 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="moments-section section-pad" id="moments">
+      <section className="moments-section section-pad" id="vehicle">
         <div className="moments-head">
           <div>
             <p className="section-kicker">{t.moments.kicker}</p>
@@ -305,14 +311,14 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
         <ul>
           {highlightOrder.map(({ id, Icon }) => (
             <li key={id}>
-              <Icon weight="light" />
+              <Icon aria-hidden="true" weight="light" />
               <span>{t.highlights[id]}</span>
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="booking-section" id="book">
+      <section className="booking-section" id="contact">
         <span aria-hidden="true" className="booking-orbit">
           <span className="orbit-dot dot-one" />
           <span className="orbit-dot dot-two" />
@@ -331,35 +337,25 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
             <br />
             {t.booking.lines[1]}
           </h2>
-          <div className="contact-lines">
-            <a href={phoneHref}>
-              <Phone weight="fill" />
-              {phoneLabel}
-            </a>
-            <a href={mapsHref} rel="noreferrer" target="_blank">
-              <MapPin weight="fill" />
-              {addressLabel}
-            </a>
-          </div>
-          <div className="booking-actions">
-            <a className="primary-cta" href={phoneHref}>
-              {t.booking.call}
-              <ArrowUpRight weight="bold" />
-            </a>
-            <a className="secondary-cta" href={mapsHref} rel="noreferrer" target="_blank">
-              {t.booking.find}
-              <MapPin weight="bold" />
-            </a>
+          <p className="booking-intro">{t.booking.intro}</p>
+          <div className="contact-cards">
+            {phoneContacts.map((contact, index) => (
+              <a className={`contact-card contact-card--${index + 1}`} href={contact.href} key={contact.id}>
+                <span>{t.contacts.call} {contact.name}</span>
+                <strong>{contact.label}</strong>
+                <Phone aria-hidden="true" weight="fill" />
+              </a>
+            ))}
           </div>
         </div>
       </section>
 
       <a className="facebook-band" href={facebookHref} rel="noreferrer" target="_blank">
         <span>
-          <FacebookLogo weight="fill" />
+          <FacebookLogo aria-hidden="true" weight="fill" />
           {t.facebook}
         </span>
-        <ArrowUpRight weight="bold" />
+        <ArrowUpRight aria-hidden="true" weight="bold" />
       </a>
 
       <footer className="site-footer section-pad">
@@ -368,14 +364,15 @@ export function EcoTaxiSite({ locale }: { locale: Locale }) {
           <p>{t.footer.tagline}</p>
         </div>
         <address className="footer-contact">
-          <a href={phoneHref}>{phoneLabel}</a>
-          <a href="mailto:labo.taxi@gmail.com">labo.taxi@gmail.com</a>
-          <a href={mapsHref} rel="noreferrer" target="_blank">
-            {addressLabel}
-          </a>
+          {phoneContacts.map((contact) => (
+            <a href={contact.href} key={contact.id}>
+              <span>{contact.name}</span>
+              {contact.label}
+            </a>
+          ))}
         </address>
         <p className="footer-legal">
-          <span>Rikša Poreč — EkoTaxi</span>
+          <span>EkoTaxi Poreč</span>
           <span>© {new Date().getFullYear()}</span>
         </p>
       </footer>

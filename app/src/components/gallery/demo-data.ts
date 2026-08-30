@@ -38,28 +38,10 @@ interface StillBase {
 // to find every site.
 const STILLS: StillBase[] = [
   {
-    src: "/presets/cover.png",
-    alt: "Renaissance portrait holding a jar of dill pickles",
-    prompt:
-      "A renaissance oil-painting portrait of a woman cradling a glowing jar of Picklehaus dill pickles, candlelit chiaroscuro, rich golden fabrics.",
-  },
-  {
     src: "/presets/how-product-works.png",
     alt: "Cinematic product hero shot",
     prompt:
       "Cinematic product hero shot explaining how the pickling process works, warm studio light, shallow depth of field.",
-  },
-  {
-    src: "/presets/explain.png",
-    alt: "Candlelit concept explainer scene",
-    prompt:
-      "Moody candlelit scene explaining a concept, editorial photography, deep shadows and warm highlights.",
-  },
-  {
-    src: "/presets/hyper-motion.png",
-    alt: "Caramel popcorn splash in motion",
-    prompt:
-      "Hyper-motion macro of caramel popcorn bursting mid-air with sugar crystals, high-speed capture, glossy amber tones.",
   },
 ];
 
@@ -76,37 +58,12 @@ interface VideoBase {
 // PLACEHOLDER ASSETS — demo data; replace when adapting (see note above).
 const VIDEOS: VideoBase[] = [
   {
-    videoSrc: "/gallery/motion-landscape.mp4",
-    poster: "/presets/hyper-motion.png",
-    alt: "Popcorn burst, animated",
-    prompt:
-      "Slow push-in on caramel popcorn bursting mid-air, high-speed macro loop, glossy amber tones.",
-    width: 854,
-    height: 480,
-  },
-  {
     videoSrc: "/gallery/product-portrait.mp4",
     poster: "/presets/how-product-works.png",
     alt: "Product hero, animated",
     prompt: "Vertical hero reveal of the product with a gentle parallax zoom, warm studio light.",
     width: 480,
     height: 854,
-  },
-  {
-    videoSrc: "/gallery/explain-square.mp4",
-    poster: "/presets/explain.png",
-    alt: "Candlelit concept, animated",
-    prompt: "Square looping candlelit scene with drifting highlights, editorial mood.",
-    width: 600,
-    height: 600,
-  },
-  {
-    videoSrc: "/gallery/cover-tall.mp4",
-    poster: "/presets/cover.png",
-    alt: "Renaissance portrait, animated",
-    prompt: "Tall portrait with a slow breathing zoom, candlelit chiaroscuro, golden fabrics.",
-    width: 512,
-    height: 768,
   },
 ];
 
