@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">EkoTaxi mark</title>
+  <desc id="desc">Olive badge with an empty bicycle rickshaw and jumping grasshopper.</desc>
+  <rect width="512" height="512" rx="112" fill="#718548" />
+  <g fill="none" stroke="#f5f0df" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="127" cy="347" r="59" stroke-width="17" />
+    <circle cx="380" cy="347" r="59" stroke-width="17" />
+    <circle cx="265" cy="347" r="43" stroke-width="14" />
+    <path d="M52 329 72 201h178l29 170H84z" stroke-width="17" />
+    <path d="M72 201c12-59 49-84 108-84h23c48 0 80 27 93 84" stroke-width="17" />
+    <path d="M99 227h125l17 82H83z" stroke-width="12" />
+    <path d="m274 348 71-80 35 79h-115l-43-71h110" stroke-width="16" />
+    <path d="m345 268 29-15M369 253h35M378 343l51-91M420 252h33" stroke-width="13" />
+  </g>
+  <g transform="translate(307 58) rotate(-8)" fill="#f5f0df" stroke="#f5f0df" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="56" cy="31" rx="29" ry="10" transform="rotate(-14 56 31)" stroke="none" />
+    <ellipse cx="86" cy="19" rx="14" ry="12" stroke="none" />
+    <path d="M96 10c17-13 30-12 39-7M98 14c17-3 29 0 38 8" fill="none" stroke-width="6" />
+    <path d="M43 36 18 68 3 69M59 36 39 76 20 84M71 34l19 25 29 5M79 27l31 12 20-5" fill="none" stroke-width="10" />
+    <path d="M41 24 15 9 3 14" fill="none" stroke-width="8" />
+  </g>
+</svg>

@@ -20,14 +20,16 @@ import { defaultLocale, isLocale, localeTag } from "../i18n/content";
 declare const __HF_DESIGN_INSPECTOR__: boolean;
 
 // Built-in defaults for any field that isn't set in app-meta.json.
-const DEFAULT_TITLE = "Eco Taxi Poreč";
-const DEFAULT_DESCRIPTION = "See Poreč from the best seat with a comfortable open-air bicycle taxi ride.";
+const DEFAULT_TITLE = "EkoTaxi Poreč";
+const DEFAULT_DESCRIPTION =
+  "Open-air EkoTaxi bicycle sidecar rides in Poreč. Call Igor at +385 98 165 2854 or Toni at +385 95 858 4045.";
 
 type AppMeta = {
   og_title?: string | null;
   og_description?: string | null;
   og_image_url?: string | null;
   favicon_url?: string | null;
+  theme_color?: string | null;
   og_video_url?: string | null;
   // Read by the Higgsfield platform (marketplace feed card), never by the
   // app itself — keep it in this file, don't render it.
@@ -72,6 +74,7 @@ function buildHead(meta: AppMeta) {
   const ogImage = toOwnAssetUrl(meta.og_image_url);
   const favicon = toOwnAssetUrl(meta.favicon_url);
   const ogVideo = toOwnAssetUrl(meta.og_video_url);
+  const themeColor = meta.theme_color;
 
   return {
     meta: [
@@ -79,7 +82,8 @@ function buildHead(meta: AppMeta) {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title },
       { name: "description", content: description },
-      { name: "author", content: "Rikša Poreč - EkoTaxi" },
+      { name: "author", content: "EkoTaxi Poreč" },
+      ...(themeColor ? [{ name: "theme-color", content: themeColor }] : []),
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
@@ -87,6 +91,9 @@ function buildHead(meta: AppMeta) {
       ...(ogImage
         ? [
             { property: "og:image", content: ogImage },
+            { property: "og:image:type", content: "image/png" },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
             { name: "twitter:image", content: ogImage },
           ]
         : []),
@@ -96,7 +103,12 @@ function buildHead(meta: AppMeta) {
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      ...(favicon ? [{ rel: "icon", href: favicon }] : []),
+      ...(favicon ? [{ rel: "icon", href: favicon, type: "image/svg+xml" }] : []),
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
+      { rel: "icon", href: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { rel: "icon", href: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "manifest", href: "/site.webmanifest" },
     ],
   };
 }

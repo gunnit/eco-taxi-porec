@@ -8,10 +8,10 @@ import type {
 import { locales, siteContent, type Locale } from "@/i18n/content";
 
 export const scrollScrubTheme: ScrollScrubTheme = {
-  accent: "#e85d4a",
-  background: "#12304a",
-  ink: "#f4f1e8",
-  muted: "#d8e2df",
+  accent: "#9daf6a",
+  background: "#1b251d",
+  ink: "#f5f0df",
+  muted: "#d7d6c5",
 };
 
 function scenesFor(locale: Locale): ScrollScrubScene[] {
@@ -31,10 +31,10 @@ function scenesFor(locale: Locale): ScrollScrubScene[] {
       actions: createElement(RideChapters, { locale }),
       clip: "/assets/world/scene-01.mp4",
       mobileClip: "/assets/world/scene-01-mobile.mp4",
-      poster: "/assets/world/scene-01-poster.jpg",
-      mobilePoster: "/assets/world/scene-01-mobile-poster.jpg",
-      objectPosition: "54% 50%",
-      mobileObjectPosition: "54% 50%",
+      poster: "/assets/world/scene-01-poster.png",
+      mobilePoster: "/assets/world/scene-01-mobile-poster.png",
+      objectPosition: "60% 50%",
+      mobileObjectPosition: "62% 50%",
       scroll: 5.4,
       linger: 0.18,
     },
